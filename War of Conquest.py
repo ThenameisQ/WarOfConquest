@@ -1,7 +1,7 @@
-if True:
-    import os
-    from random import randint
-    import time
+import os
+from random import randint
+import time
+from Models.Unit import Unit
 
 if True:
     LandBattleQuestions = ['is the weather extremely bad? (e.g. storms)', 'is attacker in native biome?', 'is defender in native biome?', 'does the attacker have to cross a river without a bridge to reach the defender?', 'has the defender been cut off from supplies?']
@@ -92,7 +92,7 @@ def show_matrix():
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
     print(f'\033[90m╚{'═' * matrix_width}╝\033[0m')
 
-def add_unit():
+def add_troop():
     global biome, units, ships, LandTroops, matrix_height, matrix_width
     unittype = ''
     while not (unittype == 'land' or unittype == 'sea'):
@@ -271,7 +271,7 @@ def move_troops():
             except RuntimeError as e:
                 print(str(e))
             else:
-                breaκ
+                break
 
 try:
     startup()
@@ -287,7 +287,7 @@ end: end program
 4: show troop stats
 ''')
         if '1' in Action:
-            add_unit()
+            add_troop()
         elif 'c' in Action:
             print('war system made for the Winds Of Change discord server.')
             print('original rules by @echo52541 on discord')
