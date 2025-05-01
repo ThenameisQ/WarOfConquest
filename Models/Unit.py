@@ -4,6 +4,6 @@ class Unit:
         self.posY = posY
         self.unitType = unitType
         self.type = type
-    def update_coords(self):
+    def update_coords(self, new_posX, new_posY):
         self.posX = new_posX
         self.posY = new_posY
