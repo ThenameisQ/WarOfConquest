@@ -12,7 +12,8 @@ if True:
     NavalBattleModifiers = [-2, 2]
     LandVsNavalModifiers = [-2, 1, -1, 2]
     NavalVsLandModifiers = [1, -2]
-    LandTroops = ['infantry', 'light infantry', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
+    LandTroops = ['infantry', 'light infantry', 'militia', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
+    Tokens = [['●', '○', '◌', '₻', '‰', 'λ', '↗'], ['▴', '⌂', 'Δ', '▲', '₷']]
     Ships = ['Sloop', 'Brig', 'Frigate', 'Ship of the Line', 'Early Ironclad']
     ShipBonuses = [0, 1, 2, 4, 8]
     Bonus = 0
@@ -38,7 +39,7 @@ def startup():
     print('''Copyright © 2025 @thenameisq. All rights reserved.
 Use of this software is permitted only by members of the Discord server Winds of Change, and only within that server. 
 Modification, distribution, or any other use is prohibited without the express written permission of the author.''')
-    time.sleep(1)
+    time.sleep(3)
     fadeout()
 
 def declare_alt_matrix():
@@ -65,7 +66,7 @@ def fadeout():
 
 def declare_matrix():
     global matrix, matrix_width, matrix_height, biome, biomes
-    biometextures = ['\033[90m▲\033[0m', '\033[32m▒\033[0m', '\033[34m≈\033[0m', '\033[92m░\033[0m', '\033[33m≈\033[0m', '\033[33m≈\033[0m', '\033[92m░\033[0m']
+    biometextures = ['\033[90m▲▲\033[0m', '\033[32m▒▒\033[0m', '\033[34m≈≈\033[0m', '\033[92m░░\033[0m', '\033[33m≈≈\033[0m', '\033[33m≈≈\033[0m', '\033[92m░░\033[0m']
     character = biometextures[biomes.index(biome)]
     matrix = []
     for a in range(matrix_height):
@@ -84,13 +85,13 @@ def show_matrix():
     global matrix_width, AtkUnits, DefUnits, Atkunits, Defunits
     declare_matrix()
     for x in range(len(AtkUnits)):
-        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}\033[0m'
+        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}{Tokens[0 if Atkunits[x].unittype == 'land' else 1][LandTroops.index(AtkUnits[x].type) if  Atkunits[x].unittype == 'land' else Ships.index(AtkUnits[x].type)]}\033[0m'
     for x in range(len(DefUnits)):
         matrix[DefUnits[x].posX][DefUnits[x].posY] = f'\033[36m{units[x]}\033[0m'
-    print(f'\033[90m╔{'═' * matrix_width}╗\033[0m')
+    print(f'\033[90m╔{'═' * matrix_width * 2}╗\033[0m')
     for row in matrix:
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
-    print(f'\033[90m╚{'═' * matrix_width}╝\033[0m')
+    print(f'\033[90m╚{'═' * matrix_width * 2}╝\033[0m')
 
 def add_troop():
     global biome, units, ships, LandTroops, matrix_height, matrix_width
@@ -121,7 +122,7 @@ def add_troop():
         while not Type in LandTroops:
             Type = input('choose troop type. you know the drill: copy-paste.')
     unit = Unit(X, Y, unittype, Type)
-    if 'def' in input('add to \033[36mdefense\033[0m or \033[35moffense\033[0m?').lower():
+    if 'def' in input('add to \033[36mDefense\033[0m or \033[35mOffense\033[0m?').lower():
         DefUnits.append(unit)
     else:
         AtkUnits.append(unit)
@@ -139,12 +140,12 @@ def dieroll():
 def checkUnits(unitList, attributeToCheck, expectedValue):
     if attributeToCheck == 'unitType':
         for x in unitList:
-            if x.unitType == attributeToCheck:
+            if x.unitType == expectedValue:
                 return True
         return False
     else:
         for x in unitList:
-            if x.type == attributeToCheck:
+            if x.type == expectedValue:
                 return True
         return False
 
