@@ -1,7 +1,7 @@
-if True:
-    import os
-    from random import randint
-    import time
+import os
+from random import randint
+import time
+from Models.Unit import Unit
 
 if True:
     LandBattleQuestions = ['is the weather extremely bad? (e.g. storms)', 'is attacker in native biome?', 'is defender in native biome?', 'does the attacker have to cross a river without a bridge to reach the defender?', 'has the defender been cut off from supplies?']
@@ -12,7 +12,8 @@ if True:
     NavalBattleModifiers = [-2, 2]
     LandVsNavalModifiers = [-2, 1, -1, 2]
     NavalVsLandModifiers = [1, -2]
-    LandTroops = ['infantry', 'light infantry', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
+    LandTroops = ['infantry', 'light infantry', 'militia', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
+    Tokens = [['●', '○', '◌', '₻', '‰', 'λ', '↗'], ['▴', '⌂', 'Δ', '▲', '₷']]
     Ships = ['Sloop', 'Brig', 'Frigate', 'Ship of the Line', 'Early Ironclad']
     ShipBonuses = [0, 1, 2, 4, 8]
     Bonus = 0
@@ -38,7 +39,7 @@ def startup():
     print('''Copyright © 2025 @thenameisq. All rights reserved.
 Use of this software is permitted only by members of the Discord server Winds of Change, and only within that server. 
 Modification, distribution, or any other use is prohibited without the express written permission of the author.''')
-    time.sleep(1)
+    time.sleep(3)
     fadeout()
 
 def declare_alt_matrix():
@@ -65,7 +66,7 @@ def fadeout():
 
 def declare_matrix():
     global matrix, matrix_width, matrix_height, biome, biomes
-    biometextures = ['\033[90m▲\033[0m', '\033[32m▒\033[0m', '\033[34m≈\033[0m', '\033[92m░\033[0m', '\033[33m≈\033[0m', '\033[33m≈\033[0m', '\033[92m░\033[0m']
+    biometextures = ['\033[90m▲▲\033[0m', '\033[32m▒▒\033[0m', '\033[34m≈≈\033[0m', '\033[92m░░\033[0m', '\033[33m≈≈\033[0m', '\033[33m≈≈\033[0m', '\033[92m░░\033[0m']
     character = biometextures[biomes.index(biome)]
     matrix = []
     for a in range(matrix_height):
@@ -74,25 +75,25 @@ def declare_matrix():
             if biome == 'beach' and b >= matrix_width / 2:
                 row.append(biometextures[2])
             elif biome == 'city' and (a in range(matrix_height // 2 - 5, matrix_height // 2 + 5) and b in range(matrix_width // 2 - 5, matrix_width // 2 + 5)):
-                row.append('\033[90m█\033[0m')
+                row.append('\033[90m██\033[0m')
             else:
                 row.append(character)
         matrix.append(row)
 
 def show_matrix():
     os.system('cls' if os.name == 'nt' else 'clear')
-    global matrix_width, AtkUnits, DefUnits, Atkunits, Defunits
+    global matrix_width, AtkUnits, DefUnits
     declare_matrix()
     for x in range(len(AtkUnits)):
-        matrix[AtkUnits[x]['Y']][AtkUnits[x]['X']] = f'\033[35m{units[x]}\033[0m'
+        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}{Tokens[0 if AtkUnits[x].unitType == 'land' else 1][LandTroops.index(AtkUnits[x].type) if AtkUnits[x].unitType == 'land' else Ships.index(AtkUnits[x].type)]}\033[0m'
     for x in range(len(DefUnits)):
-        matrix[DefUnits[x]['Y']][DefUnits[x]['X']] = f'\033[36m{units[x]}\033[0m'
-    print(f'\033[90m╔{'═' * matrix_width}╗\033[0m')
+        matrix[DefUnits[x].posX][DefUnits[x].posY] = f'\033[36m{units[x]}{Tokens[0 if DefUnits[x].unitType == 'land' else 1][LandTroops.index(DefUnits[x].type) if DefUnits[x].unitType == 'land' else Ships.index(DefUnits[x].type)]}\033[0m'
+    print(f'\033[90m╔{'═' * matrix_width * 2}╗\033[0m')
     for row in matrix:
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
-    print(f'\033[90m╚{'═' * matrix_width}╝\033[0m')
+    print(f'\033[90m╚{'═' * matrix_width * 2}╝\033[0m')
 
-def add_unit():
+def add_troop():
     global biome, units, ships, LandTroops, matrix_height, matrix_width
     unittype = ''
     while not (unittype == 'land' or unittype == 'sea'):
@@ -120,8 +121,8 @@ def add_unit():
         Type = ''
         while not Type in LandTroops:
             Type = input('choose troop type. you know the drill: copy-paste.')
-    unit = {'unittype':unittype, 'type':Type, 'X':X, 'Y':Y}
-    if 'def' in input('add to \033[36mdefense\033[0m or \033[35moffense\033[0m?').lower():
+    unit = Unit(X, Y, unittype, Type)
+    if 'def' in input('add to \033[36mDefense\033[0m or \033[35mOffense\033[0m?').lower():
         DefUnits.append(unit)
     else:
         AtkUnits.append(unit)
@@ -135,6 +136,18 @@ def dieroll():
         DefDieroll = randint(0, DieMax - 1)
         print(f'\033[35mAttacker:{AtkDie[AtkDieroll]}\033[36mDefender:{DefDie[DefDieroll]}\033[0m')
         time.sleep(0.05)
+
+def checkUnits(unitList, attributeToCheck, expectedValue):
+    if attributeToCheck == 'unitType':
+        for x in unitList:
+            if x.unitType == expectedValue:
+                return True
+        return False
+    else:
+        for x in unitList:
+            if x.type == expectedValue:
+                return True
+        return False
 
 def fight():
     global Ships, ShipBonuses, Bonus, LandBattleQuestions, NavalBattleQuestions, LandVsNavalBattleQuestions, LandBattleModifiers, NavalBattleModifiers, LandVsNavalModifiers, AtkDie, DefDie, AtkDieroll, DefDieroll, AtkUnits, DefUnits, units, biome
@@ -151,27 +164,27 @@ def fight():
             return 'crash'
         else:
             break
-    if Attacker['unittype'] == 'land' and Defender['unittype'] == 'land':
+    if Attacker.unitType == 'land' and Defender.unitType == 'land':
         situation = 1
-    elif Attacker['unittype'] == 'sea' and Defender['unittype'] == 'sea':
+    elif Attacker.unitType == 'sea' and Defender.unitType == 'sea':
         situation = 2
-    elif Attacker['unittype'] == 'sea' and Defender['unittype'] == 'land':
+    elif Attacker.unitType == 'sea' and Defender.unitType == 'land':
         situation = 3
-    elif Attacker['unittype'] == 'land' and Defender['unittype'] == 'sea':
+    elif Attacker.unitType == 'land' and Defender.unitType == 'sea':
         situation = 4
     if 1 == situation:
         if biome == 'beach':
-            if any(d.get('unittype') == 'sea' for d in AtkUnits) and Attacker['type'] == 'land' and Defender['type'] == 'land':
+            if checkUnits(AtkUnits, 'unitType', 'sea'):
                 Bonus += 1
-            if any(d.get('unittype') == 'sea' for d in DefUnits) and Attacker['type'] == 'land' and Defender['type'] == 'land':
+            if checkUnits(DefUnits, 'unitType', 'sea'):
                 Bonus -= 1
             if Attacker['type'] == 'cavalry':
                 Bonus -= 2
             if Defender['type'] == 'cavalry':
                 Bonus += 2
-        if any(d.get('type') == 'artillery' for d in AtkUnits):
+        if checkUnits(AtkUnits, 'type', 'artillery'):
             Bonus += 2
-        if any(d.get('type') == 'artillery' for d in DefUnits):
+        if checkUnits(DefUnits, 'type', 'artillery'):
             Bonus -= 2
         if biome == 'mountains':
             Bonus -= 2
@@ -238,40 +251,42 @@ def init():
     declare_matrix()
 
 def show_stats():
-    global AtkUnits, DefUnits, units
+    global AtkUnits, DefUnits, units, Tokens, LandTroops, Ships
+    if biome != 'beach':
+        print("Land troops:")
+        for x in range(len(LandTroops)):
+            print(f"    {LandTroops[x]}:{Tokens[0][x]}")
+    if biome == 'sea' or biome == 'beach':
+        print("Ships:")
+        for x in range(len(Ships)):
+            print(f"    {Ships[x]}:{Tokens[1][x]}")
     print('\033[35mAttacker:\033[0m')
-    for x in range(len(AtkUnits)):
-        print(f'\033[35m{units[x]}:\033[0m{AtkUnits[x - 1]}')
+    if AtkUnits:
+        for x in range(len(AtkUnits)):
+            print(f'\033[35m{units[x]}:\033[0m{AtkUnits[x - 1].type}')
     print('\033[36mDefender:\033[0m')
-    for x in range(len(DefUnits)):
-        print(f'\033[36m{units[x]}:\033[0m{AtkUnits[x - 1]}')
+    if DefUnits:
+        for x in range(len(DefUnits)):
+            print(f'\033[36m{units[x]}:\033[0m{DefUnits[x - 1].type}')
     input('press enter to continue...')
 
 def move_troops():
     global AtkUnits, DefUnits, units, matrix_height, matrix_width
     letter = input("give the piece's letter:")[0]
+    while True:
+        try:
+            y = int(input('enter new y position:'))
+            x = int(input('enter new x position:'))
+            if x >= matrix_width or x < 0 or y >= matrix_height or y < 0:
+                raise RuntimeError('invalid coordinates')
+        except RuntimeError as e:
+            print(str(e))
+        else:
+            break
     if 'def' in input('Defender or attacker?').lower():
-        while True:
-            try:
-                DefUnits[units.index(letter)]['X'] = int(input('enter new x position:'))
-                DefUnits[units.index(letter)]['Y'] = int(input('enter new y position:'))
-                if DefUnits[units.index(letter)]['X'] >= matrix_width or DefUnits[units.index(letter)]['X'] < 0 or DefUnits[units.index(letter)]['Y'] >= matrix_height or DefUnits[units.index(letter)]['Y'] < 0:
-                    raise RuntimeError('invalid coordinates')
-            except RuntimeError as e:
-                print(str(e))
-            else:
-                break
+        DefUnits[units.index(letter)].update_coords(x, y)
     else:
-        while True:
-            try:
-                AtkUnits[units.index(letter)]['X'] = int(input('enter new x position:'))
-                AtkUnits[units.index(letter)]['Y'] = int(input('enter new y position:'))
-                if AtkUnits[units.index(letter)]['X'] >= matrix_width or AtkUnits[units.index(letter)]['X'] < 0 or AtkUnits[units.index(letter)]['Y'] >= matrix_height or AtkUnits[units.index(letter)]['Y'] < 0:
-                    raise Exception('invalid coordinates')
-            except RuntimeError as e:
-                print(str(e))
-            else:
-                breaκ
+        AtkUnits[units.index(letter)].update_coords(x, y)
 
 try:
     startup()
@@ -287,7 +302,7 @@ end: end program
 4: show troop stats
 ''')
         if '1' in Action:
-            add_unit()
+            add_troop()
         elif 'c' in Action:
             print('war system made for the Winds Of Change discord server.')
             print('original rules by @echo52541 on discord')
@@ -301,5 +316,6 @@ end: end program
             break
         else: 
             show_stats()
-except:
+except Exception as e:
+    print(str(e))
     input('something crashed. please report how you crashed it to @thenameisq on discord. thanks!')
