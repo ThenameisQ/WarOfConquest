@@ -75,19 +75,19 @@ def declare_matrix():
             if biome == 'beach' and b >= matrix_width / 2:
                 row.append(biometextures[2])
             elif biome == 'city' and (a in range(matrix_height // 2 - 5, matrix_height // 2 + 5) and b in range(matrix_width // 2 - 5, matrix_width // 2 + 5)):
-                row.append('\033[90m█\033[0m')
+                row.append('\033[90m██\033[0m')
             else:
                 row.append(character)
         matrix.append(row)
 
 def show_matrix():
     os.system('cls' if os.name == 'nt' else 'clear')
-    global matrix_width, AtkUnits, DefUnits, Atkunits, Defunits
+    global matrix_width, AtkUnits, DefUnits
     declare_matrix()
     for x in range(len(AtkUnits)):
-        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}{Tokens[0 if Atkunits[x].unittype == 'land' else 1][LandTroops.index(AtkUnits[x].type) if  Atkunits[x].unittype == 'land' else Ships.index(AtkUnits[x].type)]}\033[0m'
+        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}{Tokens[0 if AtkUnits[x].unitType == 'land' else 1][LandTroops.index(AtkUnits[x].type) if AtkUnits[x].unitType == 'land' else Ships.index(AtkUnits[x].type)]}\033[0m'
     for x in range(len(DefUnits)):
-        matrix[DefUnits[x].posX][DefUnits[x].posY] = f'\033[36m{units[x]}\033[0m'
+        matrix[DefUnits[x].posX][DefUnits[x].posY] = f'\033[36m{units[x]}{Tokens[0 if DefUnits[x].unitType == 'land' else 1][LandTroops.index(DefUnits[x].type) if DefUnits[x].unitType == 'land' else Ships.index(DefUnits[x].type)]}\033[0m'
     print(f'\033[90m╔{'═' * matrix_width * 2}╗\033[0m')
     for row in matrix:
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
@@ -251,13 +251,23 @@ def init():
     declare_matrix()
 
 def show_stats():
-    global AtkUnits, DefUnits, units
+    global AtkUnits, DefUnits, units, Tokens, LandTroops, Ships
+    if biome != 'beach':
+        print("Land troops:")
+        for x in range(len(LandTroops)):
+            print(f"    {LandTroops[x]}:{Tokens[0][x]}")
+    if biome == 'sea' or biome == 'beach':
+        print("Ships:")
+        for x in range(len(Ships)):
+            print(f"    {Ships[x]}:{Tokens[1][x]}")
     print('\033[35mAttacker:\033[0m')
-    for x in range(len(AtkUnits)):
-        print(f'\033[35m{units[x]}:\033[0m{AtkUnits[x - 1].type}')
+    if AtkUnits:
+        for x in range(len(AtkUnits)):
+            print(f'\033[35m{units[x]}:\033[0m{AtkUnits[x - 1].type}')
     print('\033[36mDefender:\033[0m')
-    for x in range(len(DefUnits)):
-        print(f'\033[36m{units[x]}:\033[0m{DefUnits[x - 1].type}')
+    if DefUnits:
+        for x in range(len(DefUnits)):
+            print(f'\033[36m{units[x]}:\033[0m{DefUnits[x - 1].type}')
     input('press enter to continue...')
 
 def move_troops():
