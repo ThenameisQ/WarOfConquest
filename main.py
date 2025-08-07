@@ -4,318 +4,318 @@ import time
 from Models.Unit import Unit
 
 if True:
-    LandBattleQuestions = ['is the weather extremely bad? (e.g. storms)', 'is attacker in native biome?', 'is defender in native biome?', 'does the attacker have to cross a river without a bridge to reach the defender?', 'has the defender been cut off from supplies?']
-    NavalBattleQuestions = ['does the defender have naval superiority in the area?', 'does the attacker have naval superiority in the area?']
-    LandVsNavalBattleQuestions = ['has the defender set up fortifications?', 'has the attacker launched a bombardment before the attack?', 'is the weather extremely bad? (e.g. storms)', 'does the attacker have naval superiority in the area?']
-    NavalVsLandBattleQuestions = ['is the weather extremely bad? (e.g. storms)', 'does the defender have naval superiority in the area?']
-    LandBattleModifiers = [-1, 2, -2, -1, 3]
-    NavalBattleModifiers = [-2, 2]
-    LandVsNavalModifiers = [-2, 1, -1, 2]
-    NavalVsLandModifiers = [1, -2]
-    LandTroops = ['infantry', 'light infantry', 'militia', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
-    Tokens = [['●', '○', '◌', '₻', '‰', 'λ', '↗'], ['▴', '⌂', 'Δ', '▲', '₷']]
-    Ships = ['Sloop', 'Brig', 'Frigate', 'Ship of the Line', 'Early Ironclad']
-    ShipBonuses = [0, 1, 2, 4, 8]
-    Bonus = 0
-    AtkDieroll = 0
-    DefDieroll = 0
-    matrix = []
-    AtkUnits = []
-    DefUnits = []
-    AtkDie = ['\033[31m❶\033[0m', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿', '⓫', '⓬', '⓭', '⓮', '⓯', '⓰', '⓱', '⓲', '⓳', '\033[32m⓴\033[0m']
-    DefDie = ['\033[31m①\033[0m', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮', '⑯', '⑰', '⑱', '⑲', '\033[32m⑳\033[0m']
-    biome = ''
-    biomes = ['mountains', 'forest', 'sea', 'plains', 'desert', 'beach', 'city']
-    units = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T','U', 'V', 'W', 'X', 'Y', 'Z']
-    matrix_height = 'a'
-    matrix_width = 'b'
-    texture = [
+    AskPotatoes = ['is the weather extremely bad? (e.g. storms)', 'is attacker in native biome?', 'is defender in native biome?', 'does the attacker have to cross a river without a bridge to reach the defender?', 'has the defender been cut off from supplies?']
+    AskKelp = ['does the defender have naval superiority in the area?', 'does the attacker have naval superiority in the area?']
+    AskPotatoEatKelp = ['has the defender set up fortifications?', 'has the attacker launched a bombardment before the attack?', 'is the weather extremely bad? (e.g. storms)', 'does the attacker have naval superiority in the area?']
+    AskKelpEatPotato = ['is the weather extremely bad? (e.g. storms)', 'does the defender have naval superiority in the area?']
+    givePotato = [-1, 2, -2, -1, 3]
+    giveKelp = [-2, 2]
+    givePotatoEatKelp = [-2, 1, -1, 2]
+    giveKelpEatPotato = [1, -2]
+    Potatoes = ['infantry', 'light infantry', 'militia', 'cavalry', 'artillery', 'mortar', 'rocket artillery']
+    sillies = [['●', '○', '◌', '₻', '‰', 'λ', '↗'], ['▴', '⌂', 'Δ', '▲', '₷']]
+    KelpSpecies = ['Sloop', 'Brig', 'Frigate', 'Ship of the Line', 'Early Ironclad']
+    kelpPowers = [0, 1, 2, 4, 8]
+    Strengthies = 0
+    consumerPebblePower = 0
+    foodPebblePower = 0
+    gameSign = []
+    consumerFoods = []
+    foodFoods = []
+    consumerPebble = ['\033[31m❶\033[0m', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾', '❿', '⓫', '⓬', '⓭', '⓮', '⓯', '⓰', '⓱', '⓲', '⓳', '\033[32m⓴\033[0m']
+    foodPebble = ['\033[31m①\033[0m', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮', '⑯', '⑰', '⑱', '⑲', '\033[32m⑳\033[0m']
+    FieldChosen = ''
+    Fields = ['mountains', 'forest', 'sea', 'plains', 'desert', 'beach', 'city']
+    UUIDeez_nuts = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    Gamesign_Short = 'a'
+    gameSign_Fat = 'b'
+    Title = [
     r'\͞\/\/͞/ /▲\ |͞■͞>  _ __ /͞` /͞\ |\ | /͞\ | | |= (( ͞|͞',
     r' \_/\_/ /_/\\|_|\\ (O)|͞ \_, \O/ | \| \_X \_/ |_ ))  | ']
 
-def startup():
-    declare_alt_matrix()
-    alt_show_matrix()
+def LetDaGaemsBegin():
+    TitleGrabber()
+    Title_shower()
     print('''Copyright © 2025 @thenameisq. All rights reserved.
-Use of this software is permitted only by members of the Discord server Winds of Change, and only within that server. 
+Use of this software is permitted only by members of the Discord server Sovereign lands, and only within that server. 
 Modification, distribution, or any other use is prohibited without the express written permission of the author.''')
-    time.sleep(3)
-    fadeout()
+    time.sleep(int(4.668/1.556))
+    Title_effect_slow_removal()
 
-def declare_alt_matrix():
-    global matrix, matrix_width
-    matrix_width = max(len(line) for line in texture)
-    matrix = []
-    for line in texture:
-        padded_line = line.ljust(matrix_width)
-        matrix.append(list(padded_line))
+def TitleGrabber():
+    global gameSign, gameSign_Fat
+    gameSign_Fat = max(len(line) for line in Title)
+    gameSign = []
+    for line in Title:
+        padded_line = line.ljust(gameSign_Fat)
+        gameSign.append(list(padded_line))
 
-def alt_show_matrix():
-    for row in matrix:
-        print("".join(row))
+def Title_shower():
+    for Hambuger in gameSign:
+        print("".join(Hambuger))
 
-def fadeout():
-    global matrix
-    while any(char != ' ' for row in matrix for char in row):
-        x = randint(0, matrix_width - 1)
-        y = randint(0, 1)
-        if matrix[y][x] != ' ':
-            matrix[y][x] = ' '
+def Title_effect_slow_removal():
+    global gameSign
+    while any(char != ' ' for row in gameSign for char in row):
+        fat_index = randint(0, gameSign_Fat - 1)
+        short_index = randint(0, 1)
+        if gameSign[short_index][fat_index] != ' ':
+            gameSign[short_index][fat_index] = ' '
             os.system('cls' if os.name == 'nt' else 'clear')
-            alt_show_matrix()
+            Title_shower()
 
-def declare_matrix():
-    global matrix, matrix_width, matrix_height, biome, biomes
-    biometextures = ['\033[90m▲▲\033[0m', '\033[32m▒▒\033[0m', '\033[34m≈≈\033[0m', '\033[92m░░\033[0m', '\033[33m≈≈\033[0m', '\033[33m≈≈\033[0m', '\033[92m░░\033[0m']
-    character = biometextures[biomes.index(biome)]
-    matrix = []
-    for a in range(matrix_height):
-        row = []
-        for b in range(matrix_width):
-            if biome == 'beach' and b >= matrix_width / 2:
-                row.append(biometextures[2])
-            elif biome == 'city' and (a in range(matrix_height // 2 - 5, matrix_height // 2 + 5) and b in range(matrix_width // 2 - 5, matrix_width // 2 + 5)):
-                row.append('\033[90m██\033[0m')
+def Gamesign_writer():
+    global gameSign, gameSign_Fat, Gamesign_Short, FieldChosen, Fields
+    FieldFragments = ['\033[90m▲▲\033[0m', '\033[32m▒▒\033[0m', '\033[34m≈≈\033[0m', '\033[92m░░\033[0m', '\033[33m≈≈\033[0m', '\033[33m≈≈\033[0m', '\033[92m░░\033[0m']
+    Gamesign_vector_value = FieldFragments[Fields.index(FieldChosen)]
+    gameSign = []
+    for a in range(Gamesign_Short):
+        fat_values = []
+        for b in range(gameSign_Fat):
+            if FieldChosen == 'beach' and b >= gameSign_Fat / 2:
+                fat_values.append(FieldFragments[2])
+            elif FieldChosen == 'city' and (a in range(Gamesign_Short // 2 - 5, Gamesign_Short // 2 + 5) and b in range(gameSign_Fat // 2 - 5, gameSign_Fat // 2 + 5)):
+                fat_values.append('\033[90m██\033[0m')
             else:
-                row.append(character)
-        matrix.append(row)
+                fat_values.append(Gamesign_vector_value)
+        gameSign.append(fat_values)
 
-def show_matrix():
+def Gamesign_reader():
     os.system('cls' if os.name == 'nt' else 'clear')
-    global matrix_width, AtkUnits, DefUnits
-    declare_matrix()
-    for x in range(len(AtkUnits)):
-        matrix[AtkUnits[x].posY][AtkUnits[x].posX] = f'\033[35m{units[x]}{Tokens[0 if AtkUnits[x].unitType == 'land' else 1][LandTroops.index(AtkUnits[x].type) if AtkUnits[x].unitType == 'land' else Ships.index(AtkUnits[x].type)]}\033[0m'
-    for x in range(len(DefUnits)):
-        matrix[DefUnits[x].posX][DefUnits[x].posY] = f'\033[36m{units[x]}{Tokens[0 if DefUnits[x].unitType == 'land' else 1][LandTroops.index(DefUnits[x].type) if DefUnits[x].unitType == 'land' else Ships.index(DefUnits[x].type)]}\033[0m'
-    print(f'\033[90m╔{'═' * matrix_width * 2}╗\033[0m')
-    for row in matrix:
+    global gameSign_Fat, consumerFoods, foodFoods
+    Gamesign_writer()
+    for Food in range(len(consumerFoods)):
+        gameSign[consumerFoods[Food].posY][consumerFoods[Food].posX] = f'\033[35m{UUIDeez_nuts[Food]}{sillies[0 if consumerFoods[Food].unitType == 'land' else 1][Potatoes.index(consumerFoods[Food].type) if consumerFoods[Food].unitType == 'land' else KelpSpecies.index(consumerFoods[Food].type)]}\033[0m'
+    for Food in range(len(foodFoods)):
+        gameSign[foodFoods[Food].posX][foodFoods[Food].posY] = f'\033[36m{UUIDeez_nuts[Food]}{sillies[0 if foodFoods[Food].unitType == 'land' else 1][Potatoes.index(foodFoods[Food].type) if foodFoods[Food].unitType == 'land' else KelpSpecies.index(foodFoods[Food].type)]}\033[0m'
+    print(f'\033[90m╔{'═' * gameSign_Fat * 2}╗\033[0m')
+    for row in gameSign:
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
-    print(f'\033[90m╚{'═' * matrix_width * 2}╝\033[0m')
+    print(f'\033[90m╚{'═' * gameSign_Fat * 2}╝\033[0m')
 
-def add_troop():
-    global biome, units, ships, LandTroops, matrix_height, matrix_width
-    unittype = ''
-    while not (unittype == 'land' or unittype == 'sea'):
-        unittype = input('choose unit type: "land" or "sea". you know the drill.') if biome == 'beach' else 'land' if biome != 'sea' else 'sea'
-    print(f'the field is {matrix_width} characters wide, and {matrix_height} characters high.')
+def Food_order():
+    global FieldChosen, UUIDeez_nuts, ships, Potatoes, Gamesign_Short, gameSign_Fat
+    Restaurant_to_order_food_from = ''
+    while not (Restaurant_to_order_food_from == 'land' or Restaurant_to_order_food_from == 'sea'):
+        Restaurant_to_order_food_from = input('choose unit type: "land" or "sea". you know the drill.') if FieldChosen == 'beach' else 'land' if FieldChosen != 'sea' else 'sea'
+    print(f'the field is {gameSign_Fat} characters wide, and {Gamesign_Short} characters high.')
     while True:
         try:
             X = int(input('X location on map(both axes start from 0 in the top-right corner and increase from there):'))
             Y = int(input('Y location on map:'))
-            if X >= matrix_width or X < 0 or Y >= matrix_height or Y < 0:
+            if X >= gameSign_Fat or X < 0 or Y >= Gamesign_Short or Y < 0:
                 raise RuntimeError('invalid coordinates')
             else:
                 break
         except RuntimeError as e:
             input(str(e))
-    if unittype == 'sea':
-        for x in Ships:
+    if Restaurant_to_order_food_from == 'sea':
+        for x in KelpSpecies:
             print(x)
-        Type = ''
-        while not Type in Ships:
-            Type = input('choose ship type. you know the drill: copy-paste.')
+        Dish = ''
+        while not Dish in KelpSpecies:
+            Dish = input('choose ship type. you know the drill: copy-paste.')
     else:
-        for x in LandTroops:
+        for x in Potatoes:
             print(x)
-        Type = ''
-        while not Type in LandTroops:
-            Type = input('choose troop type. you know the drill: copy-paste.')
-    unit = Unit(X, Y, unittype, Type)
+        Dish = ''
+        while not Dish in Potatoes:
+            Dish = input('choose troop type. you know the drill: copy-paste.')
+    Food_to_add = Unit(X, Y, Restaurant_to_order_food_from, Dish)
     if 'def' in input('add to \033[36mDefense\033[0m or \033[35mOffense\033[0m?').lower():
-        DefUnits.append(unit)
+        foodFoods.append(Food_to_add)
     else:
-        AtkUnits.append(unit)
+        consumerFoods.append(Food_to_add)
 
-def dieroll():
-    global AtkDieroll, DefDieroll
-    DieMax = 20
+def PebbleYoink():
+    global consumerPebblePower, foodPebblePower
+    Pebble_ultimate = 20
     for x in range(randint(20, 50)):
         os.system('cls' if os.name == 'nt' else 'clear')
-        AtkDieroll = randint(0, DieMax - 1)
-        DefDieroll = randint(0, DieMax - 1)
-        print(f'\033[35mAttacker:{AtkDie[AtkDieroll]}\033[36mDefender:{DefDie[DefDieroll]}\033[0m')
+        consumerPebblePower = randint(0, Pebble_ultimate - 1)
+        foodPebblePower = randint(0, Pebble_ultimate - 1)
+        print(f'\033[35mAttacker:{consumerPebble[consumerPebblePower]}\033[36mDefender:{foodPebble[foodPebblePower]}\033[0m')
         time.sleep(0.05)
 
-def checkUnits(unitList, attributeToCheck, expectedValue):
-    if attributeToCheck == 'unitType':
-        for x in unitList:
-            if x.unitType == expectedValue:
+def FoodFinder(FoodBag, FunneToFind, Funne_search):
+    if FunneToFind == 'unitType':
+        for x in FoodBag:
+            if x.unitType == Funne_search:
                 return True
         return False
     else:
-        for x in unitList:
-            if x.type == expectedValue:
+        for x in FoodBag:
+            if x.type == Funne_search:
                 return True
         return False
 
-def fight():
-    global Ships, ShipBonuses, Bonus, LandBattleQuestions, NavalBattleQuestions, LandVsNavalBattleQuestions, LandBattleModifiers, NavalBattleModifiers, LandVsNavalModifiers, AtkDie, DefDie, AtkDieroll, DefDieroll, AtkUnits, DefUnits, units, biome
+def FoodShowOff():
+    global KelpSpecies, kelpPowers, Strengthies, AskPotatoes, AskKelp, AskPotatoEatKelp, givePotato, giveKelp, givePotatoEatKelp, consumerPebble, foodPebble, consumerPebblePower, foodPebblePower, consumerFoods, foodFoods, UUIDeez_nuts, FieldChosen
     while True:
         try:
-            Attacker = AtkUnits[units.index(input('select attacker (u know the drill):'))]
-            Defender = DefUnits[units.index(input('select defender:'))]
-            Bonus += int(input('morale points attacker:'))
-            Bonus -= int(input('morale points defender:'))
-            Bonus += int(input('doctrine bonus attacker:'))
-            Bonus -= int(input('doctrine bonus defender:'))
+            Consumer = consumerFoods[UUIDeez_nuts.index(input('select attacker (u know the drill):'))]
+            Dish = foodFoods[UUIDeez_nuts.index(input('select defender:'))]
+            Strengthies += int(input('morale points attacker:'))
+            Strengthies -= int(input('morale points defender:'))
+            Strengthies += int(input('doctrine bonus attacker:'))
+            Strengthies -= int(input('doctrine bonus defender:'))
         except:
             print('how did you fuck this part up? womp womp')
             return 'crash'
         else:
             break
-    if Attacker.unitType == 'land' and Defender.unitType == 'land':
-        situation = 1
-    elif Attacker.unitType == 'sea' and Defender.unitType == 'sea':
-        situation = 2
-    elif Attacker.unitType == 'sea' and Defender.unitType == 'land':
-        situation = 3
-    elif Attacker.unitType == 'land' and Defender.unitType == 'sea':
-        situation = 4
-    if 1 == situation:
-        if biome == 'beach':
-            if checkUnits(AtkUnits, 'unitType', 'sea'):
-                Bonus += 1
-            if checkUnits(DefUnits, 'unitType', 'sea'):
-                Bonus -= 1
-            if Attacker['type'] == 'cavalry':
-                Bonus -= 2
-            if Defender['type'] == 'cavalry':
-                Bonus += 2
-        if checkUnits(AtkUnits, 'type', 'artillery'):
-            Bonus += 2
-        if checkUnits(DefUnits, 'type', 'artillery'):
-            Bonus -= 2
-        if biome == 'mountains':
-            Bonus -= 2
-            if Attacker['type'] == 'cavalry':
-                Bonus -= 1
-            elif Attacker['type'] == 'artillery' or Attacker['type'] == 'mortar' or Attacker['type'] == 'rocket artillery':
-                Bonus += 1
-            if Defender['type'] == 'cavalry':
-                Bonus += 1
-            elif Defender['type'] == 'artillery' or Defender['type'] == 'mortar' or Defender['type'] == 'rocket artillery':
-                Bonus -= 1
-        elif biome == 'forest' or biome == 'city':
-            Bonus -= 1
-        elif biome == 'desert':
-            if Attacker['type'] == 'cavalry':
-                Bonus -= 2
-            if Defender['type'] == 'cavalry':
-                Bonus += 2
-        elif biome == 'city':
-            Bonus -= int(input('enter the level of fortifications made to the city(0-4):'))
-        Questions = LandBattleQuestions
-        Bonuses = LandBattleModifiers
-    elif 2 == situation:
-        Questions = NavalBattleQuestions
-        Bonuses = NavalBattleModifiers
-        for x in Ships:
+    if Consumer.unitType == 'land' and Dish.unitType == 'land':
+        Setingtobean = 1
+    elif Consumer.unitType == 'sea' and Dish.unitType == 'sea':
+        Setingtobean = 2
+    elif Consumer.unitType == 'sea' and Dish.unitType == 'land':
+        Setingtobean = 3
+    elif Consumer.unitType == 'land' and Dish.unitType == 'sea':
+        Setingtobean = 4
+    if 1 == Setingtobean:
+        if FieldChosen == 'beach':
+            if FoodFinder(consumerFoods, 'unitType', 'sea'):
+                Strengthies += 1
+            if FoodFinder(foodFoods, 'unitType', 'sea'):
+                Strengthies -= 1
+            if Consumer['type'] == 'cavalry':
+                Strengthies -= 2
+            if Dish['type'] == 'cavalry':
+                Strengthies += 2
+        if FoodFinder(consumerFoods, 'type', 'artillery'):
+            Strengthies += 2
+        if FoodFinder(foodFoods, 'type', 'artillery'):
+            Strengthies -= 2
+        if FieldChosen == 'mountains':
+            Strengthies -= 2
+            if Consumer['type'] == 'cavalry':
+                Strengthies -= 1
+            elif Consumer['type'] == 'artillery' or Consumer['type'] == 'mortar' or Consumer['type'] == 'rocket artillery':
+                Strengthies += 1
+            if Dish['type'] == 'cavalry':
+                Strengthies += 1
+            elif Dish['type'] == 'artillery' or Dish['type'] == 'mortar' or Dish['type'] == 'rocket artillery':
+                Strengthies -= 1
+        elif FieldChosen == 'forest' or FieldChosen == 'city':
+            Strengthies -= 1
+        elif FieldChosen == 'desert':
+            if Consumer['type'] == 'cavalry':
+                Strengthies -= 2
+            if Dish['type'] == 'cavalry':
+                Strengthies += 2
+        elif FieldChosen == 'city':
+            Strengthies -= int(input('enter the level of fortifications made to the city(0-4):'))
+        Askies = AskPotatoes
+        Givies = givePotato
+    elif 2 == Setingtobean:
+        Askies = AskKelp
+        Givies = giveKelp
+        for x in KelpSpecies:
             print(x)
-        Bonus += ShipBonuses[Ships.index(Attacker['type'])]
-        Bonus -= ShipBonuses[Ships.index(Defender['type'])]
-    elif 3 == situation:
-        Questions = LandVsNavalBattleQuestions
-        Bonuses = LandVsNavalModifiers
-        Bonus += ShipBonuses[Ships.index(Attacker['type'])]
+        Strengthies += kelpPowers[KelpSpecies.index(Consumer['type'])]
+        Strengthies -= kelpPowers[KelpSpecies.index(Dish['type'])]
+    elif 3 == Setingtobean:
+        Askies = AskPotatoEatKelp
+        Givies = givePotatoEatKelp
+        Strengthies += kelpPowers[KelpSpecies.index(Consumer['type'])]
     else:
-        Questions = NavalVsLandBattleQuestions
-        Bonuses = NavalVsLandModifiers
-        Bonus -= ShipBonuses[Ships.index(Defender['type'])]
-    for x in range(len(Questions)):
-        if 'y' in input(f'{Questions[x]}(y/n)'):
-            Bonus += Bonuses[x]
+        Askies = AskKelpEatPotato
+        Givies = giveKelpEatPotato
+        Strengthies -= kelpPowers[KelpSpecies.index(Dish['type'])]
+    for x in range(len(Askies)):
+        if 'y' in input(f'{Askies[x]}(y/n)'):
+            Strengthies += Givies[x]
     input('press enter when ready.')
-    dieroll()
-    result = AtkDieroll - DefDieroll + Bonus
+    PebbleYoink()
+    result = consumerPebblePower - foodPebblePower + Strengthies
     if result < 0:
         if abs(result) > 7:
-            AtkUnits.remove(Attacker)
+            consumerFoods.remove(Consumer)
         input(f'the defender won with a difference of {abs(result)}! {'The attacker has been killed.' if abs(result) > 7 else ''}')
     elif result > 0:
         if result > 7:
-            DefUnits.remove(Defender)
+            foodFoods.remove(Dish)
         input(f'the attacker won with a difference of {abs(result)}! {'The defender has been killed.' if result > 7 else ''}')
     else:
         input("it's a tie!")
 
-def init():
-    global biome, biomes, matrix_height, matrix_width
-    for x in biomes:
+def Start_shenanigans():
+    global FieldChosen, Fields, Gamesign_Short, gameSign_Fat
+    for x in Fields:
         print(x)
-    while not biome in biomes:
-        biome = input('choose biome. (tip:copy-paste the name)')
-    while not (isinstance(matrix_height, int) and isinstance(matrix_width, int)):
-        matrix_height = int(input('height of battlefield:'))
-        matrix_width = int(input('width of battlefield:'))
-    declare_matrix()
+    while not FieldChosen in Fields:
+        FieldChosen = input('choose biome. (tip:copy-paste the name)')
+    while not (isinstance(Gamesign_Short, int) and isinstance(gameSign_Fat, int)):
+        Gamesign_Short = int(input('height of battlefield:'))
+        gameSign_Fat = int(input('width of battlefield:'))
+    Gamesign_writer()
 
-def show_stats():
-    global AtkUnits, DefUnits, units, Tokens, LandTroops, Ships
-    if biome != 'beach':
+def Dish_inspector():
+    global consumerFoods, foodFoods, UUIDeez_nuts, sillies, Potatoes, KelpSpecies
+    if FieldChosen != 'beach':
         print("Land troops:")
-        for x in range(len(LandTroops)):
-            print(f"    {LandTroops[x]}:{Tokens[0][x]}")
-    if biome == 'sea' or biome == 'beach':
+        for x in range(len(Potatoes)):
+            print(f"    {Potatoes[x]}:{sillies[0][x]}")
+    if FieldChosen == 'sea' or FieldChosen == 'beach':
         print("Ships:")
-        for x in range(len(Ships)):
-            print(f"    {Ships[x]}:{Tokens[1][x]}")
+        for x in range(len(KelpSpecies)):
+            print(f"    {KelpSpecies[x]}:{sillies[1][x]}")
     print('\033[35mAttacker:\033[0m')
-    if AtkUnits:
-        for x in range(len(AtkUnits)):
-            print(f'\033[35m{units[x]}:\033[0m{AtkUnits[x - 1].type}')
+    if consumerFoods:
+        for x in range(len(consumerFoods)):
+            print(f'\033[35m{UUIDeez_nuts[x]}:\033[0m{consumerFoods[x - 1].type}')
     print('\033[36mDefender:\033[0m')
-    if DefUnits:
-        for x in range(len(DefUnits)):
-            print(f'\033[36m{units[x]}:\033[0m{DefUnits[x - 1].type}')
+    if foodFoods:
+        for x in range(len(foodFoods)):
+            print(f'\033[36m{UUIDeez_nuts[x]}:\033[0m{foodFoods[x - 1].type}')
     input('press enter to continue...')
 
 def move_troops():
-    global AtkUnits, DefUnits, units, matrix_height, matrix_width
-    letter = input("give the piece's letter:")[0]
+    global consumerFoods, foodFoods, UUIDeez_nuts, Gamesign_Short, gameSign_Fat
+    UUIDeez_nut = input("give the piece's letter:")[0]
     while True:
         try:
             y = int(input('enter new y position:'))
             x = int(input('enter new x position:'))
-            if x >= matrix_width or x < 0 or y >= matrix_height or y < 0:
+            if x >= gameSign_Fat or x < 0 or y >= Gamesign_Short or y < 0:
                 raise RuntimeError('invalid coordinates')
         except RuntimeError as e:
             print(str(e))
         else:
             break
     if 'def' in input('Defender or attacker?').lower():
-        DefUnits[units.index(letter)].update_coords(x, y)
+        foodFoods[UUIDeez_nuts.index(UUIDeez_nut)].update_coords(x, y)
     else:
-        AtkUnits[units.index(letter)].update_coords(x, y)
+        consumerFoods[UUIDeez_nuts.index(UUIDeez_nut)].update_coords(x, y)
 
 try:
-    startup()
-    init()
+    LetDaGaemsBegin()
+    Start_shenanigans()
     while True:
-        show_matrix()
+        Gamesign_reader()
         Action = input('''choose action to take: 
 c: show credits
 end: end program
 1: add unit
-2: fight
+2: FoodShowOffFoodShowoff
 3: move troops
 4: show troop stats
 ''')
         if '1' in Action:
-            add_troop()
+            Food_order()
         elif 'c' in Action:
             print('war system made for the Winds Of Change discord server.')
             print('original rules by @echo52541 on discord')
             print('coded by @thenameisq on discord.')
             input('press enter to continue...')
         elif '2' in Action:
-            fight()
+            FoodShowOff()
         elif '3' in Action:
             move_troops()
         elif 'end' in Action:
             break
         else: 
-            show_stats()
+            Dish_inspector()
 except Exception as e:
     print(str(e))
     input('something crashed. please report how you crashed it to @thenameisq on discord. thanks!')
