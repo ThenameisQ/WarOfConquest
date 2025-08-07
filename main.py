@@ -1,7 +1,7 @@
 import os
 from random import randint
 import time
-from Models.Unit import Unit
+from Models.FOOD_YAY import FOOD_YAY
 
 if True:
     AskPotatoes = ['is the weather extremely bad? (e.g. storms)', 'is attacker in native biome?', 'is defender in native biome?', 'does the attacker have to cross a river without a bridge to reach the defender?', 'has the defender been cut off from supplies?']
@@ -85,9 +85,9 @@ def Gamesign_reader():
     global gameSign_Fat, consumerFoods, foodFoods
     Gamesign_writer()
     for Food in range(len(consumerFoods)):
-        gameSign[consumerFoods[Food].posY][consumerFoods[Food].posX] = f'\033[35m{UUIDeez_nuts[Food]}{sillies[0 if consumerFoods[Food].unitType == 'land' else 1][Potatoes.index(consumerFoods[Food].type) if consumerFoods[Food].unitType == 'land' else KelpSpecies.index(consumerFoods[Food].type)]}\033[0m'
+        gameSign[consumerFoods[Food].Short_index][consumerFoods[Food].Fatty_index] = f'\033[35m{UUIDeez_nuts[Food]}{sillies[0 if consumerFoods[Food].Dish == 'land' else 1][Potatoes.index(consumerFoods[Food].restaurant) if consumerFoods[Food].Dish == 'land' else KelpSpecies.index(consumerFoods[Food].restaurant)]}\033[0m'
     for Food in range(len(foodFoods)):
-        gameSign[foodFoods[Food].posX][foodFoods[Food].posY] = f'\033[36m{UUIDeez_nuts[Food]}{sillies[0 if foodFoods[Food].unitType == 'land' else 1][Potatoes.index(foodFoods[Food].type) if foodFoods[Food].unitType == 'land' else KelpSpecies.index(foodFoods[Food].type)]}\033[0m'
+        gameSign[foodFoods[Food].Fatty_index][foodFoods[Food].Short_index] = f'\033[36m{UUIDeez_nuts[Food]}{sillies[0 if foodFoods[Food].Dish == 'land' else 1][Potatoes.index(foodFoods[Food].restaurant) if foodFoods[Food].Dish == 'land' else KelpSpecies.index(foodFoods[Food].restaurant)]}\033[0m'
     print(f'\033[90m╔{'═' * gameSign_Fat * 2}╗\033[0m')
     for row in gameSign:
         print(f'\033[90m║\033[0m{"".join(row)}\033[90m║\033[0m')
@@ -121,7 +121,7 @@ def Food_order():
         Dish = ''
         while not Dish in Potatoes:
             Dish = input('choose troop type. you know the drill: copy-paste.')
-    Food_to_add = Unit(X, Y, Restaurant_to_order_food_from, Dish)
+    Food_to_add = FOOD_YAY(X, Y, Restaurant_to_order_food_from, Dish)
     if 'def' in input('add to \033[36mDefense\033[0m or \033[35mOffense\033[0m?').lower():
         foodFoods.append(Food_to_add)
     else:
@@ -140,12 +140,12 @@ def PebbleYoink():
 def FoodFinder(FoodBag, FunneToFind, Funne_search):
     if FunneToFind == 'unitType':
         for x in FoodBag:
-            if x.unitType == Funne_search:
+            if x.Dish == Funne_search:
                 return True
         return False
     else:
         for x in FoodBag:
-            if x.type == Funne_search:
+            if x.restaurant == Funne_search:
                 return True
         return False
 
@@ -164,13 +164,13 @@ def FoodShowOff():
             return 'crash'
         else:
             break
-    if Consumer.unitType == 'land' and Dish.unitType == 'land':
+    if Consumer.Dish == 'land' and Dish.Dish == 'land':
         Setingtobean = 1
-    elif Consumer.unitType == 'sea' and Dish.unitType == 'sea':
+    elif Consumer.Dish == 'sea' and Dish.Dish == 'sea':
         Setingtobean = 2
-    elif Consumer.unitType == 'sea' and Dish.unitType == 'land':
+    elif Consumer.Dish == 'sea' and Dish.Dish == 'land':
         Setingtobean = 3
-    elif Consumer.unitType == 'land' and Dish.unitType == 'sea':
+    elif Consumer.Dish == 'land' and Dish.Dish == 'sea':
         Setingtobean = 4
     if 1 == Setingtobean:
         if FieldChosen == 'beach':
@@ -263,11 +263,11 @@ def Dish_inspector():
     print('\033[35mAttacker:\033[0m')
     if consumerFoods:
         for x in range(len(consumerFoods)):
-            print(f'\033[35m{UUIDeez_nuts[x]}:\033[0m{consumerFoods[x - 1].type}')
+            print(f'\033[35m{UUIDeez_nuts[x]}:\033[0m{consumerFoods[x - 1].restaurant}')
     print('\033[36mDefender:\033[0m')
     if foodFoods:
         for x in range(len(foodFoods)):
-            print(f'\033[36m{UUIDeez_nuts[x]}:\033[0m{foodFoods[x - 1].type}')
+            print(f'\033[36m{UUIDeez_nuts[x]}:\033[0m{foodFoods[x - 1].restaurant}')
     input('press enter to continue...')
 
 def move_troops():
@@ -284,9 +284,9 @@ def move_troops():
         else:
             break
     if 'def' in input('Defender or attacker?').lower():
-        foodFoods[UUIDeez_nuts.index(UUIDeez_nut)].update_coords(x, y)
+        foodFoods[UUIDeez_nuts.index(UUIDeez_nut)].index_chang(x, y)
     else:
-        consumerFoods[UUIDeez_nuts.index(UUIDeez_nut)].update_coords(x, y)
+        consumerFoods[UUIDeez_nuts.index(UUIDeez_nut)].index_chang(x, y)
 
 try:
     LetDaGaemsBegin()
